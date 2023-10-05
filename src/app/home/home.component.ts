@@ -1,16 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HousingLocationComponent} from '../housing-location/housing-location.component';
 import { Housinglocation } from '../housinglocation';
-import { ProductComponent } from '../product/product.component';
-import { Product } from '../product';
+import { HousingServiceService } from '../housingservice.service';
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
     CommonModule,
-    HousingLocationComponent,
-    ProductComponent,
+    HousingLocationComponent
     ],
   template: `
     <section>
@@ -20,37 +18,31 @@ import { Product } from '../product';
       </form>
     </section>
     <section class="results">
-      <app-housing-location [Housinglocation]="HousingLocation"></app-housing-location>
+      <app-housing-location *ngFor="let Housinglocation of 
+      HousinglocationList" [HousinglocationList]
+      ="Housinglocation"></app-housing-location>
     </section>
     <section class="listing-products">
-      <app-product [Product]="Product"></app-product >
+     <!-- <app-product [Product]="Product"></app-product > -->
 
     </section>
   `,
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  readonly baseUrl = 'https://res.cloudinary.com/dj484tw6k/f_auto,q_auto,c_pad,b_white,w_505,h_505/v1656715796/99127.png'
+ //readonly baseUrl = 'https://res.cloudinary.com/dj484tw6k/f_auto,q_auto,c_pad,b_white,w_505,h_505/v1656715796/99127.png'
 
-  HousingLocation: Housinglocation ={
-    id: 999,
-    name: 'Test',
-    city: 'Gdańsk',
-    state: 'PL',
-    photo: 'https://res.cloudinary.com/dj484tw6k/f_auto,q_auto,c_pad,b_white,w_505,h_505/v1656715796/99127.png',
-    availableUntil:50,
-    wifi: true,
-    laundry: false
-  } 
+  HousinglocationList : Housinglocation[] =[];
+  housingServise: HousingServiceService = inject(HousingServiceService);
 
-   Product: Product = {
-      id: 1,
-      product_name: "czekolada",
-      price: 50,
-      qty: 250,
-      photo: 'https://res.cloudinary.com/dj484tw6k/f_auto,q_auto,c_pad,b_white,w_505,h_505/v1656715796/99127.png',
-      available: true,
+  constructor() {
+    this.HousinglocationList = this.housingServise.
+    getAllHousinglocation();
+  }
+  
+      //photo: 'https://res.cloudinary.com/dj484tw6k/f_auto,q_auto,c_pad,b_white,w_505,h_505/v1656715796/99127.png',
+      //available: true,
       
-    }
+    //}
   }
 
